@@ -113,12 +113,77 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         labelVida.position = CGPoint(x: 600, y: 350)
         addChild(labelVida)
         
+        if(nivel == 1) {
         runAction(SKAction.repeatActionForever(
             SKAction.sequence([
                 SKAction.runBlock(addMonster),
                 SKAction.waitForDuration(1.0)
                 ])
             ))
+        } else if (nivel == 2) {
+            runAction(SKAction.repeatActionForever(
+                SKAction.sequence([
+                    SKAction.runBlock(addMonster),
+                    SKAction.waitForDuration(0.9)
+                    ])
+                ))
+        } else if (nivel == 3) {
+            runAction(SKAction.repeatActionForever(
+                SKAction.sequence([
+                    SKAction.runBlock(addMonster),
+                    SKAction.waitForDuration(0.8)
+                    ])
+                ))
+        } else if (nivel == 4) {
+            runAction(SKAction.repeatActionForever(
+                SKAction.sequence([
+                    SKAction.runBlock(addMonster),
+                    SKAction.waitForDuration(0.7)
+                    ])
+                ))
+        } else if (nivel == 5) {
+            runAction(SKAction.repeatActionForever(
+                SKAction.sequence([
+                    SKAction.runBlock(addMonster),
+                    SKAction.waitForDuration(0.6)
+                    ])
+                ))
+        } else if (nivel == 6) {
+            runAction(SKAction.repeatActionForever(
+                SKAction.sequence([
+                    SKAction.runBlock(addMonster),
+                    SKAction.waitForDuration(0.5)
+                    ])
+                ))
+        } else if (nivel == 7) {
+            runAction(SKAction.repeatActionForever(
+                SKAction.sequence([
+                    SKAction.runBlock(addMonster),
+                    SKAction.waitForDuration(0.4)
+                    ])
+                ))
+        } else if (nivel == 8) {
+            runAction(SKAction.repeatActionForever(
+                SKAction.sequence([
+                    SKAction.runBlock(addMonster),
+                    SKAction.waitForDuration(0.3)
+                    ])
+                ))
+        } else if (nivel == 9) {
+            runAction(SKAction.repeatActionForever(
+                SKAction.sequence([
+                    SKAction.runBlock(addMonster),
+                    SKAction.waitForDuration(0.2)
+                    ])
+                ))
+        } else if (nivel == 10) {
+            runAction(SKAction.repeatActionForever(
+                SKAction.sequence([
+                    SKAction.runBlock(addMonster),
+                    SKAction.waitForDuration(0.1)
+                    ])
+                ))
+        }
         
         physicsWorld.gravity = CGVectorMake(0, 0)
         physicsWorld.contactDelegate = self
@@ -146,9 +211,51 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Add the monster to the scene
         addChild(monster)
+        var actualDuration = random()
+        // Determina a velocidade do monstro por nivel.
+        //actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
         
-        // Determina a velocidade do monstro.
-        let actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
+        println(nivel)
+        
+        if (nivel == 1) {
+            actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
+        }
+        
+        if (nivel == 2) {
+            actualDuration = random(min: CGFloat(1.8), max: CGFloat(3.8))
+        }
+        
+        if (nivel == 3) {
+            actualDuration = random(min: CGFloat(1.6), max: CGFloat(3.6))
+        }
+        
+        if (nivel == 4) {
+            actualDuration = random(min: CGFloat(1.4), max: CGFloat(3.4))
+        }
+        
+        if (nivel == 5) {
+            actualDuration = random(min: CGFloat(1.1), max: CGFloat(3.1))
+        }
+        
+        if (nivel == 6) {
+            actualDuration = random(min: CGFloat(0.9), max: CGFloat(2.9))
+        }
+        
+        if (nivel == 7) {
+            actualDuration = random(min: CGFloat(0.7), max: CGFloat(2.7))
+        }
+        
+        if (nivel == 8) {
+            actualDuration = random(min: CGFloat(0.5), max: CGFloat(2.5))
+        }
+        
+        if (nivel == 9) {
+            actualDuration = random(min: CGFloat(0.3), max: CGFloat(2.3))
+        }
+        
+        if (nivel == 10) {
+            actualDuration = random(min: CGFloat(0.1), max: CGFloat(1.0))
+        }
         
         // Create the actions
         let actionMove = SKAction.moveTo(CGPoint(x: -monster.size.width/2, y: actualY), duration: NSTimeInterval(actualDuration))
@@ -159,7 +266,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let gameOverScene = GameOverScene(size: self.size, won: false)
             self.view?.presentScene(gameOverScene, transition: reveal)
             monstersDestroyed = 0
-            vidas--
         }
         
         monster.runAction(SKAction.sequence([actionMove, loseAction, actionMoveDone]))
