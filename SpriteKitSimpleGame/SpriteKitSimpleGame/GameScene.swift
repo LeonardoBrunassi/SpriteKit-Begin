@@ -11,6 +11,9 @@ import AVFoundation
 
 var touch = UITouch()
 var monstersDestroyed = 0
+var nivel = 1
+var monstrosNivel = 7
+var vidas = 3
 
 var backgroundMusicPlayer: AVAudioPlayer!
 
@@ -75,9 +78,11 @@ struct PhysicsCategory {
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
-    
     // 1
     let player = SKSpriteNode(imageNamed: "mario")
+    let labelPontos = SKLabelNode(fontNamed: "Chalkduster")
+    let labelNivel = SKLabelNode(fontNamed: "Chalkduster")
+    let labelVida = SKLabelNode(fontNamed: "Chalkduster")
     
     override func didMoveToView(view: SKView) {
         // 2
@@ -89,6 +94,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.position = CGPoint(x: size.width * 0.1, y: size.height * 0.5)
         // 4
         addChild(player)
+        
+        labelPontos.text = "\(monstersDestroyed)"
+        labelPontos.fontSize = 40
+        labelPontos.fontColor = SKColor.blackColor()
+        labelPontos.position = CGPoint(x: size.width/2, y: size.height/2 - 160)
+        addChild(labelPontos)
+        
+        labelNivel.text = "Nível \(nivel)"
+        labelNivel.fontSize = 40
+        labelNivel.fontColor = SKColor.blackColor()
+        labelNivel.position = CGPoint(x: size.width/2, y: size.height/2 + 140)
+        addChild(labelNivel)
+        
+        labelVida.text = "Vidas \(vidas)"
+        labelVida.fontSize = 25
+        labelVida.fontColor = SKColor.blackColor()
+        labelVida.position = CGPoint(x: 600, y: 350)
+        addChild(labelVida)
         
         runAction(SKAction.repeatActionForever(
             SKAction.sequence([
@@ -124,7 +147,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Add the monster to the scene
         addChild(monster)
         
-        // Determine speed of the monster
+        // Determina a velocidade do monstro.
         let actualDuration = random(min: CGFloat(2.0), max: CGFloat(4.0))
         
         // Create the actions
@@ -135,12 +158,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let reveal = SKTransition.flipHorizontalWithDuration(0.5)
             let gameOverScene = GameOverScene(size: self.size, won: false)
             self.view?.presentScene(gameOverScene, transition: reveal)
+            monstersDestroyed = 0
+            vidas--
         }
         
         monster.runAction(SKAction.sequence([actionMove, loseAction, actionMoveDone]))
-        
-        
-        
         
         monster.physicsBody = SKPhysicsBody(rectangleOfSize: monster.size) // 1
         monster.physicsBody?.dynamic = true // 2
@@ -199,7 +221,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         projectile.removeFromParent()
         monster.removeFromParent()
         monstersDestroyed++
-        if (monstersDestroyed > 30) {
+        labelPontos.text = "\(monstersDestroyed)"
+        if (monstersDestroyed >= monstrosNivel) {
+            nivel++
+            monstersDestroyed = 0
+            monstrosNivel = monstrosNivel + 7
             let reveal = SKTransition.flipHorizontalWithDuration(0.5)
             let gameOverScene = GameOverScene(size: self.size, won: true)
             self.view?.presentScene(gameOverScene, transition: reveal)
